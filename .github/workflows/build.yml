@@ -68,12 +68,16 @@ jobs:
       - name: Build package
         run: make x86_64
 
+      # Best-effort: a private repo's free-tier Actions artifact storage (500 MB)
+      # is easily exceeded by a ~243 MB .s9pk. Don't let a storage-quota hit fail
+      # the build — the durable delivery path is the GitHub Release below.
       - name: Upload .s9pk artifact
         uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
           name: openwhispr-x86_64-s9pk
           path: '*.s9pk'
-          if-no-files-found: error
+          if-no-files-found: warn
 
       - name: Attach .s9pk to release
         if: startsWith(github.ref, 'refs/tags/v')
