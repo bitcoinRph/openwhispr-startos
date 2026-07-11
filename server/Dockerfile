@@ -8,10 +8,18 @@ RUN apt-get update && \
 ARG WHISPER_CPP_TAG=v1.9.1
 RUN git clone --depth 1 --branch ${WHISPER_CPP_TAG} https://github.com/ggml-org/whisper.cpp /src
 
+# GGML_NATIVE=OFF builds a portable CPU baseline instead of detecting the build
+# host's features. Two reasons this is required, not just nice-to-have:
+#   1. aarch64: ggml's native detection emits a self-contradictory -march
+#      (…+dotprod…+nodotprod…) that the assembler rejects under emulated builds.
+#   2. x86_64: a -march=native binary built on a modern CI runner can use AVX-512
+#      and SIGILL on the user's older StartOS CPU (e.g. low-power N100/Celeron).
+# ggml still runtime-dispatches available SIMD, so this stays correct everywhere.
 RUN cmake -S /src -B /src/build \
       -DCMAKE_BUILD_TYPE=Release \
       -DBUILD_SHARED_LIBS=OFF \
-      -DWHISPER_BUILD_TESTS=OFF && \
+      -DWHISPER_BUILD_TESTS=OFF \
+      -DGGML_NATIVE=OFF && \
     cmake --build /src/build --target whisper-server -j"$(nproc)"
 
 # Stage 2: runtime
