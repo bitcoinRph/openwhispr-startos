@@ -1,5 +1,5 @@
 import { setupManifest } from '@start9labs/start-sdk'
-import { alertInstall, long, short } from './i18n'
+import { long, short } from './i18n'
 
 export const manifest = setupManifest({
   id: 'openwhispr',
@@ -27,7 +27,11 @@ export const manifest = setupManifest({
     },
   },
   alerts: {
-    install: alertInstall,
+    // No install alert: on StartOS the install alert pops a confirm dialog
+    // before the sideload upload begins. The first-start guidance (run "Get API
+    // Credentials"; the model downloads on first start) lives in instructions.md
+    // and the README instead, so tapping Install proceeds straight to upload.
+    install: null,
     update: null,
     uninstall: null,
     restore: null,

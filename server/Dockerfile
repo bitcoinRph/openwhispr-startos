@@ -25,9 +25,16 @@ RUN cmake -S /src -B /src/build \
 # Stage 2: runtime
 FROM node:22-slim
 
+# ca-certificates is needed for the HTTPS Whisper-model download on first start.
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg ca-certificates && \
+    apt-get install -y --no-install-recommends ca-certificates && \
     rm -rf /var/lib/apt/lists/*
+
+# Static ffmpeg (audio → 16 kHz mono WAV) instead of Debian's `ffmpeg` package,
+# which pulls in the full libav* / codec-library dependency tree. The static
+# build is one self-contained binary, shrinking the image (and the .s9pk). The
+# image is multi-arch, so buildx copies the arch-matching binary automatically.
+COPY --from=mwader/static-ffmpeg:7.1.1 /ffmpeg /usr/local/bin/ffmpeg
 
 COPY --from=whisper-build /src/build/bin/whisper-server /usr/local/bin/whisper-server
 COPY shim/server.js /app/server.js
