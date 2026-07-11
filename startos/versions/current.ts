@@ -1,18 +1,18 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.1.1:0',
+  version: '0.1.2:0',
   releaseNotes: {
     en_US:
-      'Multi-arch (x86_64 + aarch64), portable CPU build, smaller image, and a simplified install flow.',
+      'Include the OpenMP runtime required by whisper-server so the speech engine starts reliably.',
     es_ES:
-      'Multiarquitectura (x86_64 + aarch64), compilación de CPU portátil, imagen más pequeña e instalación simplificada.',
+      'Incluye el runtime OpenMP requerido por whisper-server para que el motor de voz arranque de forma fiable.',
     de_DE:
-      'Multi-Arch (x86_64 + aarch64), portabler CPU-Build, kleineres Image und vereinfachter Installationsablauf.',
+      'Enthält die von whisper-server benötigte OpenMP-Laufzeit, damit die Spracherkennung zuverlässig startet.',
     pl_PL:
-      'Wieloarchitektura (x86_64 + aarch64), przenośny build CPU, mniejszy obraz i uproszczona instalacja.',
+      'Dodaje środowisko uruchomieniowe OpenMP wymagane przez whisper-server, aby silnik mowy uruchamiał się niezawodnie.',
     fr_FR:
-      'Multi-arch (x86_64 + aarch64), build CPU portable, image plus petite et installation simplifiée.',
+      'Inclut le runtime OpenMP requis par whisper-server afin que le moteur vocal démarre de manière fiable.',
   },
   migrations: {
     up: async ({ effects }) => {},

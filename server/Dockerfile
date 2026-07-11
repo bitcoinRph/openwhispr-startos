@@ -26,8 +26,11 @@ RUN cmake -S /src -B /src/build \
 FROM node:22-slim
 
 # ca-certificates is needed for the HTTPS Whisper-model download on first start.
+# libgomp1 is required by the whisper-server binary produced by the CMake
+# Release build. Without it, whisper-server exits at runtime with:
+#   error while loading shared libraries: libgomp.so.1
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates && \
+    apt-get install -y --no-install-recommends ca-certificates libgomp1 && \
     rm -rf /var/lib/apt/lists/*
 
 # Static ffmpeg (audio → 16 kHz mono WAV) instead of Debian's `ffmpeg` package,
