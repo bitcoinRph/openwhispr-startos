@@ -1,27 +1,26 @@
 export const short = {
   en_US:
-    'Self-hosted speech-to-text with an iPhone keyboard, web recorder, and OpenAI-compatible API',
-  es_ES:
-    'Voz a texto autoalojado con teclado para iPhone, grabadora web y API compatible con OpenAI',
+    'Self-hosted speech-to-text: iPhone keyboard, web recorder, OpenAI API',
+  es_ES: 'Voz a texto autoalojado: teclado iPhone, grabadora web y API OpenAI',
   de_DE:
-    'Selbst gehostete Sprache-zu-Text mit iPhone-Tastatur, Web-Rekorder und OpenAI-kompatibler API',
+    'Selbstgehostetes Sprache-zu-Text: iPhone-Tastatur, Web-Rekorder, OpenAI-API',
   pl_PL:
-    'Samodzielnie hostowane zamiana mowy na tekst z klawiaturą iPhone, nagrywarką web i API zgodnym z OpenAI',
+    'Mowa na tekst self-hosted: klawiatura iPhone, nagrywarka web, API OpenAI',
   fr_FR:
-    'Reconnaissance vocale auto-hébergée avec clavier iPhone, enregistreur web et API compatible OpenAI',
+    'Voix-à-texte auto-hébergée : clavier iPhone, enregistreur web, API OpenAI',
 }
 
 export const long = {
   en_US:
-    'OpenWhispr STT Server turns your Start9 server into a private speech-to-text engine powered by whisper.cpp. All transcription runs locally with open Whisper models — audio never leaves your server. Use it from your iPhone through the Diction keyboard app (dictate directly inside Telegram, iMessage, or any app), through the built-in mobile web recorder, through iOS Shortcuts, or from any client that speaks the OpenAI transcription API (including the OpenWhispr desktop app and Open WebUI). Optional AI text cleanup can be routed to your local Ollama.',
+    'OpenWhispr STT Server turns your Start9 into a private speech-to-text engine powered by whisper.cpp. All transcription runs locally with open Whisper models — audio never leaves your server. Use it from an iPhone via the Diction keyboard (dictate in Telegram, iMessage, or any app), the built-in web recorder, iOS Shortcuts, or any OpenAI-compatible client (including OpenWhispr desktop and Open WebUI). Optional AI text cleanup routes to your local Ollama.',
   es_ES:
-    'OpenWhispr STT Server convierte tu servidor Start9 en un motor privado de voz a texto impulsado por whisper.cpp. Toda la transcripción se ejecuta localmente con modelos abiertos de Whisper: el audio nunca sale de tu servidor. Úsalo desde tu iPhone a través de la aplicación de teclado Diction (dicta directamente en Telegram, iMessage o cualquier aplicación), a través de la grabadora web móvil integrada, mediante Atajos de iOS o desde cualquier cliente que hable la API de transcripción de OpenAI (incluida la aplicación de escritorio OpenWhispr y Open WebUI). La limpieza opcional de texto con IA puede dirigirse a tu Ollama local.',
+    'OpenWhispr STT Server convierte tu Start9 en un motor privado de voz a texto con whisper.cpp. Toda la transcripción es local con modelos Whisper abiertos: el audio nunca sale de tu servidor. Úsalo desde el iPhone con el teclado Diction (dicta en Telegram, iMessage o cualquier app), la grabadora web, Atajos de iOS o cualquier cliente compatible con OpenAI (incluidos OpenWhispr y Open WebUI). La limpieza con IA opcional usa tu Ollama local.',
   de_DE:
-    'OpenWhispr STT Server verwandelt deinen Start9-Server in eine private Sprache-zu-Text-Engine auf Basis von whisper.cpp. Die gesamte Transkription läuft lokal mit offenen Whisper-Modellen — Audio verlässt niemals deinen Server. Nutze ihn vom iPhone über die Diction-Tastatur-App (diktiere direkt in Telegram, iMessage oder jeder anderen App), über den integrierten mobilen Web-Rekorder, über iOS-Kurzbefehle oder von jedem Client, der die OpenAI-Transkriptions-API spricht (einschließlich der OpenWhispr-Desktop-App und Open WebUI). Optionale KI-Textbereinigung kann an dein lokales Ollama geleitet werden.',
+    'OpenWhispr STT Server macht dein Start9 zur privaten Sprache-zu-Text-Engine mit whisper.cpp. Die Transkription läuft lokal mit offenen Whisper-Modellen — Audio verlässt nie deinen Server. Nutze es per iPhone über die Diction-Tastatur (diktiere in Telegram, iMessage oder jeder App), den Web-Rekorder, iOS-Kurzbefehle oder jeden OpenAI-kompatiblen Client (inkl. OpenWhispr und Open WebUI). Optionale KI-Bereinigung nutzt dein lokales Ollama.',
   pl_PL:
-    'OpenWhispr STT Server zamienia twój serwer Start9 w prywatny silnik zamiany mowy na tekst oparty na whisper.cpp. Cała transkrypcja odbywa się lokalnie z otwartymi modelami Whisper — dźwięk nigdy nie opuszcza twojego serwera. Korzystaj z niego na iPhonie przez aplikację klawiatury Diction (dyktuj bezpośrednio w Telegramie, iMessage lub dowolnej aplikacji), przez wbudowaną mobilną nagrywarkę web, przez Skróty iOS lub z dowolnego klienta obsługującego API transkrypcji OpenAI (w tym aplikację desktopową OpenWhispr i Open WebUI). Opcjonalne czyszczenie tekstu przez AI można skierować do lokalnej Ollamy.',
+    'OpenWhispr STT Server zamienia twój Start9 w prywatny silnik mowy na tekst z whisper.cpp. Transkrypcja działa lokalnie z otwartymi modelami Whisper — dźwięk nie opuszcza serwera. Używaj z iPhone’a przez klawiaturę Diction (dyktuj w Telegramie, iMessage lub dowolnej aplikacji), nagrywarkę web, Skróty iOS lub dowolnego klienta OpenAI (w tym OpenWhispr i Open WebUI). Opcjonalne czyszczenie AI korzysta z lokalnej Ollamy.',
   fr_FR:
-    "OpenWhispr STT Server transforme votre serveur Start9 en moteur privé de reconnaissance vocale propulsé par whisper.cpp. Toute la transcription s'exécute localement avec des modèles Whisper ouverts — l'audio ne quitte jamais votre serveur. Utilisez-le depuis votre iPhone via l'application clavier Diction (dictez directement dans Telegram, iMessage ou toute autre application), via l'enregistreur web mobile intégré, via les Raccourcis iOS ou depuis tout client parlant l'API de transcription OpenAI (y compris l'application de bureau OpenWhispr et Open WebUI). Le nettoyage optionnel du texte par IA peut être dirigé vers votre Ollama local.",
+    'OpenWhispr STT Server transforme votre Start9 en moteur privé de reconnaissance vocale avec whisper.cpp. La transcription est locale avec des modèles Whisper ouverts — l’audio ne quitte jamais votre serveur. Utilisez-le depuis un iPhone via le clavier Diction (dictez dans Telegram, iMessage ou toute app), l’enregistreur web, les Raccourcis iOS ou tout client compatible OpenAI (dont OpenWhispr et Open WebUI). Le nettoyage IA optionnel utilise votre Ollama local.',
 }
 
 export const alertInstall = {
