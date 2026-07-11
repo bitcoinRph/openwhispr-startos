@@ -1,0 +1,3 @@
+[submodule "diction"]
+	path = diction
+	url = https://github.com/omachala/diction

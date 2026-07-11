@@ -14,11 +14,16 @@ export const manifest = setupManifest({
   images: {
     openwhispr: {
       source: { dockerBuild: { workdir: './server' } },
-      arch: ['x86_64'],
+      arch: ['x86_64', 'aarch64'],
     },
     gateway: {
-      source: { dockerTag: 'ghcr.io/omachala/diction-gateway:v9.0' },
-      arch: ['x86_64'],
+      // Built from the pinned `diction` submodule (tag v9.0) rather than the
+      // upstream ghcr.io/omachala/diction-gateway:v9.0 image, which ships amd64
+      // only. The gateway is a static CGO-free Go binary, so building from
+      // source yields both x86_64 and aarch64 — required for StartOS to enable
+      // Install on ARM hardware (Start9 Server, Raspberry Pi).
+      source: { dockerBuild: { workdir: './diction/gateway' } },
+      arch: ['x86_64', 'aarch64'],
     },
   },
   alerts: {

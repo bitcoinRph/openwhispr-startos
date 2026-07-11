@@ -19,6 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    strategy:
+      # Build each arch independently: a slow/failing aarch64 emulated build
+      # must not prevent the proven x86_64 .s9pk from shipping.
+      fail-fast: false
+      matrix:
+        arch: [x86_64, aarch64]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,6 +41,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y make buildah fuse-overlayfs slirp4netns uidmap squashfs-tools squashfs-tools-ng jq
+
+      # aarch64 images are built on the amd64 runner via QEMU emulation.
+      - name: Set up QEMU
+        if: matrix.arch == 'aarch64'
+        uses: docker/setup-qemu-action@v3
 
       - name: Configure Docker Buildx
         run: |
@@ -65,25 +76,23 @@ jobs:
       - name: Initialize StartOS packaging workspace
         run: start-cli s9pk init-workspace ..
 
-      - name: Build package
-        run: make x86_64
+      - name: Build package (${{ matrix.arch }})
+        run: make ${{ matrix.arch }}
 
       # Best-effort: a private repo's free-tier Actions artifact storage (500 MB)
-      # is easily exceeded by a ~243 MB .s9pk. Don't let a storage-quota hit fail
-      # the build — the durable delivery path is the GitHub Release below.
+      # is easily exceeded; don't let a storage-quota hit fail the build. The
+      # durable delivery path is the GitHub Release below.
       - name: Upload .s9pk artifact
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: openwhispr-x86_64-s9pk
+          name: openwhispr-${{ matrix.arch }}-s9pk
           path: '*.s9pk'
           if-no-files-found: warn
 
-      # Durable delivery: publish the .s9pk as a GitHub Release asset (not subject
-      # to the Actions artifact storage quota). The runner creates the tag
-      # server-side via `gh release create`, so no tag push from a client is
-      # needed. Tag is derived from the package version (e.g. v0.1.0), or the
-      # pushed tag name when the build was triggered by a v* tag.
+      # Publish the arch's .s9pk to a GitHub Release (not subject to the artifact
+      # storage quota). Both matrix jobs target the same tag; `create || true`
+      # tolerates the create race, and the two jobs upload distinctly-named files.
       - name: Publish .s9pk to GitHub Release
         if: github.event_name != 'pull_request'
         env:
@@ -97,8 +106,5 @@ jobs:
             TAG="v${VERSION}"
           fi
           echo "Publishing $S9PK to release $TAG"
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" "$S9PK" --clobber
-          else
-            gh release create "$TAG" "$S9PK" --title "$TAG" --generate-notes
-          fi
+          gh release create "$TAG" --title "$TAG" --generate-notes 2>/dev/null || true
+          gh release upload "$TAG" "$S9PK" --clobber
