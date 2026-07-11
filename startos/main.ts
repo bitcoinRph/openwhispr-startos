@@ -42,6 +42,8 @@ export const main = sdk.setupMain(async ({ effects }) => {
   if (store?.llmBaseUrl && store?.llmModel) {
     gatewayEnv.LLM_BASE_URL = store.llmBaseUrl
     gatewayEnv.LLM_MODEL = store.llmModel
+    gatewayEnv.LLM_PROMPT =
+      'You are a transcript cleanup engine. Correct speech-to-text errors, punctuation, casing, grammar, and obvious homophones while preserving the speaker\'s meaning and wording. Return only the cleaned transcript, with no commentary, no preamble, and no markdown.'
   }
 
   return sdk.Daemons.of(effects)
