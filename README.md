@@ -4,7 +4,7 @@
 whisper.cpp with an iPhone keyboard integration (via the [Diction](https://github.com/omachala/diction)
 gateway), a mobile web recorder (PWA), and an OpenAI-compatible transcription API.
 
-Inspired by (and API-compatible with) the [OpenWhispr](https://github.com/bitcoinRph/openwhispr)
+Inspired by (and API-compatible with) the [OpenWhispr](https://github.com/OpenWhispr/openwhispr)
 desktop dictation app, whose local engine is the same whisper.cpp `whisper-server`.
 
 ## Architecture
@@ -42,21 +42,28 @@ the service volume). Audio never leaves the server.
 
 ## Building
 
-Requirements: docker, [start-cli](https://github.com/Start9Labs/start-cli), npm, make
-(see the [packaging environment setup](https://github.com/bitcoinRph/ai-service-packaging)).
+Requirements: Docker, [start-cli](https://github.com/Start9Labs/start-technologies), npm, make, and a StartOS packaging workspace
+(see the [StartOS packaging environment setup](https://docs.start9.com/packaging/0.4.0.x/environment-setup.html)).
 
 ```bash
 npm ci
 npm run check     # TypeScript check
-make              # build openwhispr.s9pk (x86_64)
-make install      # or sideload the .s9pk via the StartOS UI
+make x86          # build openwhispr_x86_64.s9pk
+make arm          # build openwhispr_aarch64.s9pk
+make install      # install the most recent .s9pk, or sideload it via the StartOS UI
 ```
+
+Build-only targets force `start-cli s9pk pack` to `-H http://localhost` so CI does not depend on the scaffolded workspace host `https://dev-vm.local`; install and publish targets still use the configured StartOS host/registry.
 
 Notes:
 
-- `x86_64` only: the published Diction gateway image is linux/amd64. (The gateway is open-source Go —
-  building it from source for aarch64 is a possible future enhancement.)
+- The Diction gateway is built from the pinned source submodule instead of the amd64-only upstream
+  container image, so the StartOS package can publish both x86_64 and aarch64 artifacts.
 - The whisper.cpp version is pinned via `ARG WHISPER_CPP_TAG` in [server/Dockerfile](./server/Dockerfile).
+- OpenWhispr upstream compatibility was reviewed against
+  [v1.8.3](https://github.com/OpenWhispr/openwhispr/releases/tag/v1.8.3). The StartOS package remains
+  a headless local STT/API service, so desktop-only GPU, calendar, collaboration, and Electron UI
+  changes from that release do not require runtime wiring changes here.
 - First service start downloads the selected Whisper model (75 MB – 1.6 GB) into the `main` volume.
 
 ## Usage
