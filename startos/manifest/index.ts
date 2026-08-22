@@ -6,7 +6,7 @@ export const manifest = setupManifest({
   title: 'OpenWhispr STT Server',
   license: 'MIT',
   packageRepo: 'https://github.com/bitcoinRph/openwhispr-startos',
-  upstreamRepo: 'https://github.com/bitcoinRph/openwhispr',
+  upstreamRepo: 'https://github.com/OpenWhispr/openwhispr',
   marketingUrl: 'https://openwhispr.com/',
   donationUrl: null,
   description: { short, long },
