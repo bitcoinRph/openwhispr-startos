@@ -42,15 +42,18 @@ the service volume). Audio never leaves the server.
 
 ## Building
 
-Requirements: docker, [start-cli](https://github.com/Start9Labs/start-cli), npm, make
-(see the [packaging environment setup](https://github.com/bitcoinRph/ai-service-packaging)).
+Requirements: Docker, [start-cli](https://github.com/Start9Labs/start-technologies), npm, make, and a StartOS packaging workspace
+(see the [StartOS packaging environment setup](https://docs.start9.com/packaging/0.4.0.x/environment-setup.html)).
 
 ```bash
 npm ci
 npm run check     # TypeScript check
-make              # build openwhispr.s9pk (x86_64)
-make install      # or sideload the .s9pk via the StartOS UI
+make x86          # build openwhispr_x86_64.s9pk
+make arm          # build openwhispr_aarch64.s9pk
+make install      # install the most recent .s9pk, or sideload it via the StartOS UI
 ```
+
+Build-only targets force `start-cli s9pk pack` to `-H http://localhost` so CI does not depend on the scaffolded workspace host `https://dev-vm.local`; install and publish targets still use the configured StartOS host/registry.
 
 Notes:
 

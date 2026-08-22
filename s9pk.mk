@@ -2,7 +2,14 @@
 # This file is imported by ./Makefile. Make edits there
 
 PACKAGE_ID := $(shell awk -F"'" '/id:/ {print $$2}' startos/manifest/index.ts)
-INGREDIENTS := $(shell start-cli s9pk list-ingredients 2>/dev/null)
+START_CLI ?= start-cli
+# Local build-only s9pk commands do not need a real StartOS host. Newer
+# start-cli versions still resolve the workspace host profile before packing;
+# the scaffolded default is https://dev-vm.local, which is not resolvable in CI.
+# Keep install/publish targets on the configured host/registry, but force pack
+# and ingredient discovery to a harmless local host URL.
+START_CLI_BUILD ?= $(START_CLI) -H http://localhost
+INGREDIENTS := $(shell $(START_CLI_BUILD) s9pk list-ingredients 2>/dev/null)
 # Resolve the actual git dir so this works inside git worktrees, where .git
 # is a file pointing at <main>/.git/worktrees/<name> rather than a directory.
 GIT_DIR := $(shell git rev-parse --git-dir 2>/dev/null)
@@ -23,7 +30,7 @@ endif
 .SECONDARY:
 
 define SUMMARY
-	@manifest=$$(start-cli s9pk inspect $(1) manifest); \
+	@manifest=$$($(START_CLI) s9pk inspect $(1) manifest); \
 	size=$$(du -h $(1) | awk '{print $$1}'); \
 	title=$$(printf '%s' "$$manifest" | jq -r .title); \
 	version=$$(printf '%s' "$$manifest" | jq -r .version); \
@@ -66,12 +73,12 @@ riscv riscv64: arch/riscv64
 $(BASE_NAME).s9pk: $(INGREDIENTS) $(GIT_DEPS)
 	@$(MAKE) --no-print-directory ingredients
 	@echo "   Packing '$@'..."
-	start-cli s9pk pack -o $@
+	$(START_CLI_BUILD) s9pk pack -o $@
 
 $(BASE_NAME)_%.s9pk: $(INGREDIENTS) $(GIT_DEPS)
 	@$(MAKE) --no-print-directory ingredients
 	@echo "   Packing '$@'..."
-	start-cli s9pk pack --arch=$* -o $@
+	$(START_CLI_BUILD) s9pk pack --arch=$* -o $@
 
 ingredients: $(INGREDIENTS)
 	@echo "   Re-evaluating ingredients..."
@@ -86,9 +93,9 @@ install: | check-deps check-init
 		echo "Error: No .s9pk file found. Run 'make' first."; \
 		exit 1; \
 	fi; \
-	S9PK=$$(start-cli s9pk select) || exit 1; \
+	S9PK=$$($(START_CLI) s9pk select) || exit 1; \
 	printf "\n🚀 Installing %s to %s ...\n" "$$S9PK" "$$HOST"; \
-	start-cli package install -s "$$S9PK"
+	$(START_CLI) package install -s "$$S9PK"
 
 publish: | all
 	@REGISTRY=$$(awk -F'/' '/^registry:/ {print $$3}' ~/.startos/config.yaml); \
@@ -111,11 +118,11 @@ publish: | all
 			read -r ans; \
 			case "$$ans" in [yY]*) ;; *) echo "Skipping $$s9pk"; continue ;; esac; \
 		fi; \
-		start-cli s9pk publish "$$s9pk"; \
+		$(START_CLI) s9pk publish "$$s9pk"; \
 	done
 
 check-deps:
-	@command -v start-cli >/dev/null || \
+	@command -v $(START_CLI) >/dev/null || \
 		(echo "Error: start-cli not found. Please see https://docs.start9.com/latest/developer-guide/sdk/installing-the-sdk" && exit 1)
 	@command -v npm >/dev/null || \
 		(echo "Error: npm not found. Please install Node.js and npm." && exit 1)
@@ -123,7 +130,7 @@ check-deps:
 check-init:
 	@if [ ! -f ~/.startos/developer.key.pem ]; then \
 		echo "Initializing StartOS developer environment..."; \
-		start-cli init-key; \
+		$(START_CLI) init-key; \
 	fi
 
 javascript/index.js: $(shell find startos -type f) tsconfig.json node_modules
