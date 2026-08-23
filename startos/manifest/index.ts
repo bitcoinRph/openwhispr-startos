@@ -3,7 +3,7 @@ import { long, short } from './i18n'
 
 export const manifest = setupManifest({
   id: 'openwhispr',
-  title: 'OpenWhispr STT Server',
+  title: 'OpenWhispr',
   license: 'MIT',
   packageRepo: 'https://github.com/bitcoinRph/openwhispr-startos',
   upstreamRepo: 'https://github.com/OpenWhispr/openwhispr',
