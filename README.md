@@ -63,7 +63,8 @@ Notes:
 - OpenWhispr upstream compatibility was reviewed against
   [v1.8.3](https://github.com/OpenWhispr/openwhispr/releases/tag/v1.8.3). The StartOS package remains
   a headless local STT/API service, so desktop-only GPU, calendar, collaboration, and Electron UI
-  changes from that release do not require runtime wiring changes here.
+  changes from that release do not require runtime wiring changes here. The v1.8.3 StartOS release
+  path is QA-gated before merge and uses the custom registry poller only after GitHub `.s9pk` assets exist.
 - First service start downloads the selected Whisper model (75 MB – 1.6 GB) into the `main` volume.
 
 ## Usage
