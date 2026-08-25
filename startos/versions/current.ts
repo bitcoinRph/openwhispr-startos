@@ -2,18 +2,18 @@ import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 import { sdk } from '../sdk'
 
 export const current = VersionInfo.of({
-  version: '0.1.6:0',
+  version: '0.1.7:0',
   releaseNotes: {
     en_US:
-      'Refresh the OpenWhispr v1.8.3 compatibility release with QA-gated StartOS registry readiness notes while preserving safe daemon relaunch after package updates.',
+      'Review OpenWhispr v1.9.0 compatibility for the StartOS local STT service, preserving the existing Diction gateway, local Whisper model storage, and QA-gated custom registry release path.',
     es_ES:
-      'Actualiza la versión de compatibilidad OpenWhispr v1.8.3 con notas de preparación para el registro StartOS validadas por QA y conserva el relanzamiento seguro de daemons tras las actualizaciones.',
+      'Revisa la compatibilidad de OpenWhispr v1.9.0 para el servicio local STT de StartOS y conserva la pasarela Diction, el almacenamiento local de modelos Whisper y la ruta de publicación al registro personalizado validada por QA.',
     de_DE:
-      'Aktualisiert die OpenWhispr-v1.8.3-Kompatibilitätsversion mit QA-geprüften Hinweisen zur StartOS-Registry-Bereitschaft und behält den sicheren Daemon-Neustart nach Paketaktualisierungen bei.',
+      'Prüft die OpenWhispr-v1.9.0-Kompatibilität für den lokalen StartOS-STT-Dienst und behält das bestehende Diction-Gateway, die lokale Whisper-Modellspeicherung und den QA-geprüften Veröffentlichungsweg zur benutzerdefinierten Registry bei.',
     pl_PL:
-      'Odświeża wydanie zgodności OpenWhispr v1.8.3 o zweryfikowane przez QA informacje gotowości rejestru StartOS i zachowuje bezpieczne ponowne uruchamianie daemonów po aktualizacjach.',
+      'Sprawdza zgodność OpenWhispr v1.9.0 z lokalną usługą STT dla StartOS, zachowując bramę Diction, lokalne przechowywanie modeli Whisper oraz ścieżkę publikacji do niestandardowego rejestru zabezpieczoną przez QA.',
     fr_FR:
-      'Actualise la version de compatibilité OpenWhispr v1.8.3 avec des notes de préparation au registre StartOS validées par QA tout en conservant la relance sûre des daemons après mise à jour.',
+      'Vérifie la compatibilité OpenWhispr v1.9.0 pour le service STT local StartOS tout en conservant la passerelle Diction, le stockage local des modèles Whisper et le chemin de publication vers le registre personnalisé validé par QA.',
   },
   migrations: {
     up: async ({ effects }) => {
