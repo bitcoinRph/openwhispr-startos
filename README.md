@@ -61,11 +61,11 @@ Notes:
   container image, so the StartOS package can publish both x86_64 and aarch64 artifacts.
 - The whisper.cpp version is pinned via `ARG WHISPER_CPP_TAG` in [server/Dockerfile](./server/Dockerfile).
 - OpenWhispr upstream compatibility was reviewed against
-  [v1.9.0](https://github.com/OpenWhispr/openwhispr/releases/tag/v1.9.0). The StartOS package remains
-  a headless local STT/API service, so desktop-only assistant UI, guided setup, meeting notes,
-  calendar, Linux/Windows desktop integration, GPU, and Electron app changes from that release do not
-  require runtime wiring changes here. The v1.9.0 StartOS release path is QA-gated before merge and
-  uses the custom registry poller only after GitHub `.s9pk` assets exist.
+  [v1.9.2](https://github.com/OpenWhispr/openwhispr/releases/tag/v1.9.2). The StartOS package remains
+  a headless local STT/API service, so the Windows sign-in, desktop meeting-capture, prompt lifecycle,
+  Electron packaged-build, and calendar/Stripe desktop fixes from that release do not require StartOS
+  runtime wiring changes here. The v1.9.2 StartOS release path is QA-gated before merge and uses the
+  custom registry poller only after GitHub `.s9pk` assets exist.
 - First service start downloads the selected Whisper model (75 MB – 1.6 GB) into the `main` volume.
 
 ## Usage

@@ -5,7 +5,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends git build-essential cmake ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-ARG WHISPER_CPP_TAG=v1.9.1
+ARG WHISPER_CPP_TAG=v1.9.2
 RUN git clone --depth 1 --branch ${WHISPER_CPP_TAG} https://github.com/ggml-org/whisper.cpp /src
 
 # GGML_NATIVE=OFF builds a portable CPU baseline instead of detecting the build
