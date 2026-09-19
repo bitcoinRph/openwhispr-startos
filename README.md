@@ -57,15 +57,27 @@ Build-only targets force `start-cli s9pk pack` to `-H http://localhost` so CI do
 
 Notes:
 
-- The Diction gateway is built from the pinned source submodule instead of the amd64-only upstream
+- The Diction gateway is built from the pinned source submodule (currently
+  [v13.0](https://github.com/omachala/diction/releases/tag/v13.0)) instead of the amd64-only upstream
   container image, so the StartOS package can publish both x86_64 and aarch64 artifacts.
+- Gateway v13 fails the `/v1/text/*` routes closed: with `AUTH_ENABLED` unset it answers
+  `403 text_routes_closed` unless `TEXT_ROUTES_OPEN` is set. [main.ts](./startos/main.ts) sets it only
+  alongside a configured AI-cleanup LLM, because the gateway registers those routes solely when one is
+  set. Transcription (`/v1/audio/*`) is unaffected by that guard.
+- Gateway pairing (v13, QR + key rotation) defaults to `optional`, so keyless requests from the Diction
+  app are still accepted. Its keystore defaults to `/data/gateway-keys.json`; the gateway subcontainer
+  mounts no volume, so the store is skipped with a startup warning and pairing stays off, which is the
+  pre-v13 behaviour.
 - The whisper.cpp version is pinned via `ARG WHISPER_CPP_TAG` in [server/Dockerfile](./server/Dockerfile).
 - OpenWhispr upstream compatibility was reviewed against
-  [v1.9.2](https://github.com/OpenWhispr/openwhispr/releases/tag/v1.9.2). The StartOS package remains
-  a headless local STT/API service, so the Windows sign-in, desktop meeting-capture, prompt lifecycle,
-  Electron packaged-build, and calendar/Stripe desktop fixes from that release do not require StartOS
-  runtime wiring changes here. The v1.9.2 StartOS release path is QA-gated before merge and uses the
-  custom registry poller only after GitHub `.s9pk` assets exist.
+  [v1.10.2](https://github.com/OpenWhispr/openwhispr/releases/tag/v1.10.2). The StartOS package remains
+  a headless local STT/API service, so the notes/AI Summary rework, meeting capture, team spaces,
+  assistant chat, dictation-pill and Windows microphone fixes from the v1.10.x line are desktop-client
+  concerns and do not require StartOS runtime wiring changes here. OpenWhispr's self-hosted transcription
+  mode still posts multipart `file`/`model`/`language`/`response_format` to `/inference` and
+  `/v1/audio/transcriptions`, both of which this package already serves, so the desktop app can point at
+  this service unchanged. The one server-side item from that line — whisper.cpp wrapping transcripts on a
+  word boundary — is picked up by the whisper.cpp bump below rather than by wrapper changes.
 - First service start downloads the selected Whisper model (75 MB – 1.6 GB) into the `main` volume.
 
 ## Usage

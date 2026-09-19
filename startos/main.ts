@@ -43,7 +43,12 @@ export const main = sdk.setupMain(async ({ effects }) => {
     gatewayEnv.LLM_BASE_URL = store.llmBaseUrl
     gatewayEnv.LLM_MODEL = store.llmModel
     gatewayEnv.LLM_PROMPT =
-      'You are a transcript cleanup engine. Correct speech-to-text errors, punctuation, casing, grammar, and obvious homophones while preserving the speaker\'s meaning and wording. Return only the cleaned transcript, with no commentary, no preamble, and no markdown.'
+      "You are a transcript cleanup engine. Correct speech-to-text errors, punctuation, casing, grammar, and obvious homophones while preserving the speaker's meaning and wording. Return only the cleaned transcript, with no commentary, no preamble, and no markdown."
+    // Gateway v13 fails /v1/text/* closed: with AUTH_ENABLED unset it answers
+    // 403 text_routes_closed unless TEXT_ROUTES_OPEN is set, which would break
+    // cleanup and edit. Opened only alongside a configured LLM, since the
+    // gateway registers those routes solely when one is set.
+    gatewayEnv.TEXT_ROUTES_OPEN = 'true'
   }
 
   return sdk.Daemons.of(effects)
