@@ -61,11 +61,14 @@ Notes:
   container image, so the StartOS package can publish both x86_64 and aarch64 artifacts.
 - The whisper.cpp version is pinned via `ARG WHISPER_CPP_TAG` in [server/Dockerfile](./server/Dockerfile).
 - OpenWhispr upstream compatibility was reviewed against
-  [v1.9.2](https://github.com/OpenWhispr/openwhispr/releases/tag/v1.9.2). The StartOS package remains
-  a headless local STT/API service, so the Windows sign-in, desktop meeting-capture, prompt lifecycle,
-  Electron packaged-build, and calendar/Stripe desktop fixes from that release do not require StartOS
-  runtime wiring changes here. The v1.9.2 StartOS release path is QA-gated before merge and uses the
-  custom registry poller only after GitHub `.s9pk` assets exist.
+  [v1.10.2](https://github.com/OpenWhispr/openwhispr/releases/tag/v1.10.2). The StartOS package remains
+  a headless local STT/API service, so the notes/AI Summary rework, meeting capture, team spaces,
+  assistant chat, dictation-pill and Windows microphone fixes from the v1.10.x line are desktop-client
+  concerns and do not require StartOS runtime wiring changes here. OpenWhispr's self-hosted transcription
+  mode still posts multipart `file`/`model`/`language`/`response_format` to `/inference` and
+  `/v1/audio/transcriptions`, both of which this package already serves, so the desktop app can point at
+  this service unchanged. The one server-side item from that line — whisper.cpp wrapping transcripts on a
+  word boundary — is picked up by the whisper.cpp bump below rather than by wrapper changes.
 - First service start downloads the selected Whisper model (75 MB – 1.6 GB) into the `main` volume.
 
 ## Usage
