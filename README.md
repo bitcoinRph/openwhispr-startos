@@ -57,8 +57,17 @@ Build-only targets force `start-cli s9pk pack` to `-H http://localhost` so CI do
 
 Notes:
 
-- The Diction gateway is built from the pinned source submodule instead of the amd64-only upstream
+- The Diction gateway is built from the pinned source submodule (currently
+  [v13.0](https://github.com/omachala/diction/releases/tag/v13.0)) instead of the amd64-only upstream
   container image, so the StartOS package can publish both x86_64 and aarch64 artifacts.
+- Gateway v13 fails the `/v1/text/*` routes closed: with `AUTH_ENABLED` unset it answers
+  `403 text_routes_closed` unless `TEXT_ROUTES_OPEN` is set. [main.ts](./startos/main.ts) sets it only
+  alongside a configured AI-cleanup LLM, because the gateway registers those routes solely when one is
+  set. Transcription (`/v1/audio/*`) is unaffected by that guard.
+- Gateway pairing (v13, QR + key rotation) defaults to `optional`, so keyless requests from the Diction
+  app are still accepted. Its keystore defaults to `/data/gateway-keys.json`; the gateway subcontainer
+  mounts no volume, so the store is skipped with a startup warning and pairing stays off, which is the
+  pre-v13 behaviour.
 - The whisper.cpp version is pinned via `ARG WHISPER_CPP_TAG` in [server/Dockerfile](./server/Dockerfile).
 - OpenWhispr upstream compatibility was reviewed against
   [v1.10.2](https://github.com/OpenWhispr/openwhispr/releases/tag/v1.10.2). The StartOS package remains
